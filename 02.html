@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antuane Game</title>
+</head>
+<body>
+    <script type="text/javascript">
+        'use strict';
+        (function () {
+            'use strict';
+
+            var world = {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                background: "#111",
+                love: "#F00",
+                left: window.innerWidth - 100,
+                top: (Math.round((Math.random()*window.innerHeight))),
+                size: 200,
+            };
+
+
+            var player = {
+                color: "#000000",
+                size: 200,
+                left: (window.innerWidth * 0.5),
+                top: 0,
+                action: false,
+            };
+
+            //#3e3f3a
+            document.body.style.backgroundColor = world.background;
+            document.body.style.fontSize = "120px";
+            document.body.style.overflow = "hidden";
+
+            var playerDiv = document.createElement('div');
+            playerDiv.innerHTML = "✈";
+            playerDiv.id = 'player';
+            playerDiv.style.position = 'absolute';
+            playerDiv.style.left = player.left + 'px';
+            playerDiv.style.top = player.top + 'px';
+            
+            document.body.appendChild(playerDiv);
+
+            var loveDiv = document.createElement('div');
+            loveDiv.innerHTML = "⊗";
+            loveDiv.id = 'love';
+            loveDiv.style.position = 'absolute';
+            loveDiv.style.left = world.left + 'px';
+            loveDiv.style.top = world.top + 'px';
+            loveDiv.style.width = '100%';
+            loveDiv.style.height = '100%';
+            loveDiv.style.color = world.love;
+            loveDiv.style.backgroundImage = "radial-gradient(#000000 5%, transparent 33%, transparent 33%)";
+            loveDiv.style.backgroundPosition = "20px 100px";
+            loveDiv.style.backgroundSize = "1000px 500px";
+            loveDiv.style.backgroundPositionX = "0px";
+            
+            
+            document.body.appendChild(loveDiv);
+
+
+            setInterval(() => {
+
+                if (world.left <= 0){
+                    world.top = (Math.round((Math.random()*window.innerHeight))) - world.size;
+                    world.left = window.innerWidth - world.size;
+                }
+
+                world.left -= 30;
+
+                loveDiv.style.left = world.left + 'px';
+                loveDiv.style.top = world.top + 'px';
+
+                playerDiv.style.top = player.top + 'px';
+
+                if (
+                    (playerDiv.style.top) >= (loveDiv.style.top)
+                    ) {
+                    document.body.style.backgroundColor = "#000";
+                } else {
+                    document.body.style.backgroundColor = world.background;
+                }
+
+            }, 100);
+            
+            document.addEventListener('keydown', (event) => {
+                player.action = event.key;
+
+                if(player.action == 'ArrowUp') {
+                    if((player.top) > 0) {
+                        player.top -= 10;
+                    }    
+                }
+
+                if(player.action == 'ArrowDown') {
+                    if((player.top + 200) < world.height) {
+                        player.top += 10;
+                    }
+                }
+
+                if(player.action == 'ArrowLeft') {
+                    world.left += 10;
+                }
+
+                if(player.action == 'ArrowRight') {
+                    world.left -= 10;
+                }
+            });
+
+            document.addEventListener('keyup', (event) => {
+                player.action = "";
+            });
+
+            window.addEventListener("resize", (function(e) {
+                location.reload();
+            }));
+            
+        })();
+    
+    </script>
+</body>
+</html>

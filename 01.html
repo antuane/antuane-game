@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antuane Game</title>
+</head>
+<body>
+    <script type="text/javascript">
+        'use strict';
+        (function () {
+            'use strict';
+
+            var world = {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                background: "#333",
+                size: 50,
+            };
+
+
+            var player = {
+                color: "#0F0",
+                size: 200,
+                top: (window.innerHeight - 100),
+                left: (window.innerWidth * 0.8),
+                action: false,
+            };
+
+            var playerShot = {
+                color: "#0F0",
+                size: 200,
+                top: (window.innerHeight - 100),
+                left: (window.innerWidth * 0.8),
+                action: false,
+            };
+
+            var enemy = {
+                color: "#F00",
+                size: 200,
+                top: 0,
+                left: (window.innerWidth * 0.2),
+                run : 5,
+                action: false,
+            };
+
+            var enemyShot = {
+                color: "#F00",
+                size: 200,
+                top: 0,
+                left: (window.innerWidth * 0.2),
+                action: false,
+            };
+
+            document.body.style.backgroundColor = world.background;
+            document.body.style.fontFamily = "Arial";
+            document.body.style.fontSize = "120px";
+            document.body.style.overflow = "hidden";
+
+            var playerDiv = document.createElement('div');
+            playerDiv.innerHTML = "•";
+            playerDiv.id = 'player';
+            playerDiv.style.position = 'absolute';
+            playerDiv.style.left = player.left + 'px';
+            playerDiv.style.top = player.top + 'px';
+            playerDiv.style.color = player.color;
+            
+            document.body.appendChild(playerDiv);
+
+            var playerShotDiv = document.createElement('div');
+            playerShotDiv.innerHTML = "•";
+            playerShotDiv.id = 'playerShot';
+            // playerShotDiv.style.background = '#FFF';
+            playerShotDiv.style.position = 'absolute';
+            playerShotDiv.style.left = player.left + 'px';
+            playerShotDiv.style.top = player.top + 'px';
+            playerShotDiv.style.color = playerShot.color;
+            
+            document.body.appendChild(playerShotDiv);
+
+
+            var enemyDiv = document.createElement('div');
+            enemyDiv.innerHTML = "•";
+            enemyDiv.id = 'enemy';
+            // enemyDiv.style.background = '#FFF';
+            enemyDiv.style.position = 'absolute';
+            enemyDiv.style.left = enemy.left + 'px';
+            enemyDiv.style.top = '0px';
+            enemyDiv.style.color = enemy.color;
+            
+            document.body.appendChild(enemyDiv);
+
+            var enemyShotDiv = document.createElement('div');
+            enemyShotDiv.innerHTML = "•";
+            enemyShotDiv.id = 'enemyShot';
+            enemyShotDiv.style.position = 'absolute';
+            enemyShotDiv.style.left = enemy.left + 'px';
+            enemyShotDiv.style.top = '0px';
+            enemyShotDiv.style.color = enemyShot.color;
+            
+            document.body.appendChild(enemyShotDiv);
+
+            setInterval(() => {
+
+                if (playerShot.top <= 0){
+                    playerShot.action = false;
+                    playerShot.top = player.top;
+                }
+
+                if(playerShot.action){
+                    playerShot.top -= 100;
+                    playerShotDiv.style.display = "block";
+                    playerShotDiv.style.top = playerShot.top + 'px';
+                    playerShotDiv.style.left = playerShot.left + 'px';
+                } else {
+                    playerShot.top = player.top;
+                    playerShotDiv.style.display = "none";
+                }
+
+                playerDiv.style.top = player.top + 'px';
+                playerDiv.style.left = player.left + 'px';
+
+                enemy.left += enemy.run;
+
+                if (enemy.left < 0) {
+                    enemy.run = 10;
+                }
+
+                if (enemy.left > window.innerWidth) {
+                    enemy.run = -10;
+                }
+
+                if (enemyShot.top > window.innerHeight) {
+                    enemyShot.action = true;
+                    enemyShot.top = 0;
+                    enemyShot.left = enemy.left;
+                }
+
+                if(enemyShot.action){
+                    enemyShot.top += 100;
+                    enemyShotDiv.style.display = "block";
+                    enemyShotDiv.style.top = enemyShot.top + 'px';
+                    enemyShotDiv.style.left = enemyShot.left + 'px';
+                } else {
+                    enemyShot.top = 0;
+                    enemyShotDiv.style.display = "none";
+                    enemyShot.action = true;
+                }
+
+                enemyDiv.style.left = enemy.left + 'px';
+                enemyShotDiv.style.top = enemyShot.top + 'px';
+                enemyShotDiv.style.left = enemyShot.left + 'px';        
+
+                if(enemy.left <= playerShot.left + world.size && enemy.left >= playerShot.left  - world.size&& playerShot.top <= enemy.top){
+                    document.body.style.backgroundColor = "#00F";
+                }
+
+                if(player.left <= enemyShot.left + world.size && player.left >= enemyShot.left - world.size && enemyShot.top >= player.top){
+                    document.body.style.backgroundColor = "#000";
+                }
+
+            }, 100);
+            
+            document.addEventListener('keydown', (event) => {
+                player.action = event.key;
+
+                if(player.action == 'ArrowUp') {
+                    if(!playerShot.action){
+                        playerShot.top = player.top;
+                        playerShot.left = player.left;
+                        playerShot.action = true;
+                    }
+                }
+
+                // if(player.action == 'ArrowDown') {
+                //     if((player.top + 120) < world.height) {
+                //         player.top += 1;
+                //     }
+                // }
+
+                if(player.action == 'ArrowLeft') {
+                    if((player.left) > 0) {
+                        player.left -= 10;
+                    }    
+                }
+
+                if(player.action == 'ArrowRight') {
+                    if((player.left + 120) < world.width) {
+                        player.left += 10;
+                    }
+                }
+            });
+
+            document.addEventListener('keyup', (event) => {
+                player.action = "";
+            });
+
+            window.addEventListener("resize", (function(e) {
+                location.reload();
+            }));
+            
+        })();
+    
+    </script>
+</body>
+</html>

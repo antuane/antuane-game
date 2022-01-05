@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antuane Game</title>
+</head>
+<body>
+    <style>
+    </style>
+    <script type="text/javascript">
+        'use strict';
+        (function () {
+            'use strict';
+
+            var world = {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                background: "#522b06 url('./background.gif') no-repeat center top",
+            };
+
+            var floor = {
+                width: window.innerWidth * 100,
+                height: 240,
+                background: "url('./floor.png') repeat-x",
+                border: "#367800",
+                left : 0,
+                bottom: 0,
+            };
+
+            var fence = {
+                width: window.innerWidth * 100,
+                height: 240,
+                background: "url('./fence.png') repeat-x",
+                border: "#367800",
+                left : 0,
+                bottom: 0,
+            };
+
+            var player = {
+                color: "#2F4F4F",
+                width: 500,
+                left: (window.innerWidth * 0.5) - (320),
+                bottom: -50,
+                direction: '',
+            };
+
+            document.body.style.background = world.background;
+            document.body.style.backgroundSize = "auto";
+            document.body.style.fontFamily = "Sans";
+            document.body.style.fontSize = "120px";
+            document.body.style.overflow = "hidden";
+
+            var worldDiv = document.createElement('div');
+            worldDiv.id = 'player';
+            worldDiv.style.position = 'absolute';
+            worldDiv.style.width = '100%';
+            worldDiv.style.height = '!00%';
+            worldDiv.style.left = '0px';
+            worldDiv.style.bottom = '0px';
+            worldDiv.style.background = world.color;
+            document.body.appendChild(worldDiv);
+
+            var playerImg = new Image(player.width);
+            playerImg.src = './player.gif';
+
+            var playerDiv = document.createElement('div');
+            playerDiv.id = 'player';
+            playerDiv.style.position = 'absolute';
+            playerDiv.style.width = player.width + 'px';
+            playerDiv.style.height = 'auto';
+            playerDiv.style.left = player.left + 'px';
+            playerDiv.style.bottom = player.bottom + 'px';
+            // playerDiv.style.background = player.color;
+            playerDiv.append(playerImg);
+            worldDiv.append(playerDiv);
+
+            var floorDiv = document.createElement('div');
+            floorDiv.id = 'floor';
+            floorDiv.style.position = 'absolute';
+            floorDiv.style.left = floor.left + 'px';
+            floorDiv.style.bottom = floor.bottom + 'px';
+            floorDiv.style.border = 'none';
+            floorDiv.style.background = floor.background;
+            floorDiv.style.width = floor.width + 'px';
+            floorDiv.style.height = floor.height + 'px';
+            
+            worldDiv.append(floorDiv);
+
+            var fenceDiv = document.createElement('div');
+            fenceDiv.id = 'fence';
+            fenceDiv.style.position = 'absolute';
+            fenceDiv.style.left = fence.left + 'px';
+            fenceDiv.style.bottom = fence.bottom + 'px';
+            fenceDiv.style.border = 'none';
+            fenceDiv.style.background = fence.background;
+            fenceDiv.style.width = fence.width + 'px';
+            fenceDiv.style.height = fence.height + 'px';
+            
+            worldDiv.append(fenceDiv);
+
+            
+
+            
+
+            setInterval(() => {
+
+                floor.left -= 10;
+                floorDiv.style.left = floor.left + 'px';
+
+                fence.left -= 10;
+                fenceDiv.style.left = fence.left + 'px';
+
+                if (floor.left <= -(world.width)) {
+                    floor.left = 0;
+                    fence.left = 0;
+                }
+
+                if(player.direction == 'right') {
+                    playerDiv.style.transform = "rotateY(0deg)";
+                }
+
+                if(player.direction == 'left') {
+                    playerDiv.style.transform = "rotateY(180deg)";
+                }
+                
+
+            }, 100);
+            
+            document.addEventListener('keydown', (event) => {
+                player.action = event.key;
+
+                if(player.action == 'ArrowUp') {
+                }
+
+                if(player.action == 'ArrowDown') {
+                }
+
+                if(player.action == 'ArrowLeft') {
+                    player.direction = 'left';
+                }
+
+                if(player.action == 'ArrowRight') {
+                    player.direction = 'right';
+                }
+            });
+
+            document.addEventListener('keyup', (event) => {
+                player.action = "";
+            });
+
+            function touchHandle(evt) {
+                // evt.preventDefault();
+                evt.handleCancel();
+                return false; 
+            }
+
+            document.addEventListener("touchstart", touchHandle, false);
+            document.addEventListener("touchend", touchHandle, false);
+            document.addEventListener("touchcancel", touchHandle, false);
+            document.addEventListener("touchleave", touchHandle, false);
+            document.addEventListener("touchmove", touchHandle, false);
+
+            window.addEventListener("resize", (function(e) {
+                location.reload();
+            }));
+            
+        })();
+    
+    </script>
+</body>
+</html>
